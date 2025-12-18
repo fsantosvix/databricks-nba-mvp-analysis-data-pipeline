@@ -3,19 +3,25 @@
 ## 1. Project Objective
 
 ### 1.1 Context 
-The NBA Most Valuable Player (MVP) award is given annually to the player considered to have delivered the most outstanding performance during the regular season. It is one of the most prestigious individual honours in professional sports and reflects a combination of statistical production, leadership, team impact and broader contextual factors.  
-Studying MVP winners, as well as players who produced at a similar level without receiving the award, helps reveal how elite performance is recognised, how player roles evolve over time and how individual excellence does or does not align with team success.
+The Most Valuable Player (MVP) award is given annually to the player considered to have delivered the most outstanding performance in the National Basketball Association (NBA) during the regular season. It is one of the most prestigious individual honours in professional sports and reflects a combination of statistical production, leadership, team impact and broader contextual factors.  
+
+Studying MVP winners, as well as players who produced at a similar level without receiving the award, helps reveal how elite performance is recognised, how player roles evolve over time and how individual excellence does or does not align with team success.  
+
 The primary objective of this project is to analyse NBA player and team data in order to answer a set of research questions related to MVP performance, positional tendencies, team success and standout seasons by non MVP players.
+
+The sections below provide an overview of the project, details its methodology, and outline the analytical findings. It summarises the data sources, processing approach, modelling decisions and key results obtained from the analysis.  
+
+The complete implementation, including all transformation steps, validation procedures and query outputs, is available in the notebook `NBA_MVP_Pipeline.ipynb` included in this repository.
 
 ### 1.2 Research Questions
 
 The analysis is guided by five central questions:
 
-1. Which statistics are most consistent among MVP winners across seasons  
-2. What is the distribution of positions among MVP winners  
-3. Do some teams historically concentrate more MVP awards  
-4. How often does the season MVP play for the team that wins the NBA championship  
-5. Which players delivered statistically outstanding seasons without winning the MVP award
+1. Which statistics are most consistent among MVP winners across seasons?  
+2. What is the distribution of positions among MVP winners?  
+3. Do some teams historically concentrate more MVP awards?  
+4. How often does the season MVP play for the team that wins the NBA championship?  
+5. Which players delivered statistically outstanding seasons without winning the MVP award?
 
 These questions explore patterns of individual performance, positional roles, organisational dominance and the relationship between elite regular season performance and postseason outcomes.
 
@@ -23,10 +29,11 @@ These questions explore patterns of individual performance, positional roles, or
 ## 2. Data Sources
 
 This project uses one primary dataset and three supplementary datasets.  
-Together, they provide player statistics, MVP outcomes, team abbreviations and championship results required for the analytical steps of the work.
+Together, they provide player statistics, MVP outcomes, team abbreviations and championship results required for the analytical steps of the work.  
+Copies of the datasets are saved in the `CSV files` folder for reference.
 
 ### 2.1 Primary Dataset
-The main dataset was obtained from Kaggle:
+The main dataset (NBA_Dataset.csv) was obtained from Kaggle:
 
 **NBA Player Season Statistics With MVP and Win Share (1982 to 2022)**  
 https://www.kaggle.com/datasets/robertsunderhaft/nba-player-season-statistics-with-mvp-win-share/data
@@ -34,24 +41,23 @@ https://www.kaggle.com/datasets/robertsunderhaft/nba-player-season-statistics-wi
 It contains detailed regular season statistics for NBA players, including efficiency measures and MVP vote shares.
 
 ### 2.2 Supplementary Datasets
-Three additional datasets were created manually by the author using public information from Basketball Reference: https://www.basketball-reference.com/
+Three additional datasets were created manually by the author using public information from Basketball Reference website: https://www.basketball-reference.com/
 
 These datasets are:
-1. ListOfMVPs_AllSeasons.csv  
-   Contains the list of MVP winners for each season and the team they represented.
-
-2. Champions.csv  
-   Records the NBA champion for each season and their conference.
-
-3. Franchise_Abbrev.csv  
-   Provides a mapping between NBA franchises and their standard abbreviations.
+1. ListOfMVPs_AllSeasons.csv - Contains the list of MVP winners for each season and the team they represented.
+2. Champions.csv - Records the NBA champion for each season and their conference.
+3. Franchise_Abbrev.csv - Provides a mapping between NBA franchises and their standard abbreviations.
 
 These supplementary files support data validation, table joins and the creation of gold layer analytical tables.
+
+### 2.3 Data Ingestion
+For practicality, all datasets used in this project were manually uploaded to Databricks in CSV format.  
+Since all files were already available in structured tabular form, manual upload was chosen as a simple and efficient ingestion method for this project.  
 
 ---
 ## 3. Platform Used
 
-The project was developed entirely in Databricks Free Edition. The platform was used for all core activities, including:
+The project was developed entirely in **Databricks Free Edition**. The platform was used for all core activities, including:
 
 - managing the workspace and file system  
 - loading the datasets into a Databricks Volume  
@@ -78,9 +84,9 @@ The project follows the medallion architecture, which organises data into three 
 
 This structure supports transparent data lineage and allows each transformation step to be documented and verified independently.
 
-### 4.2 Data Structure Used (Flat Tables)
+### 4.2 Data Structure Used
 
-Within the gold layer, the project adopts a **flat table structure**.  
+Within the gold layer, the project adopts a *flat table* structure.  
 Each gold table contains all relevant attributes needed to support the analyses directly, without additional dimensional layers or multiple lookup tables.
 
 This structure was selected because:
@@ -120,11 +126,11 @@ This table contains season level statistical records for all NBA players from 19
 | tov_per_g | double | Turnovers per game | 0.0 | 5.7 |
 | pts_per_g | double | Points per game | 0.0 | 37.1 |
 | fg_pct | double | Field goal percentage (0 to 1 scale) | 0.0 | 1.0 |
-| fg3_pct | double | Three point percentage (0 to 1 scale) | 0.0 | 1.0 |
+| fg3_pct | double | Three point field goal percentage (0 to 1 scale) | 0.0 | 1.0 |
 | ft_pct | double | Free throw percentage (0 to 1 scale) | 0.0 | 1.0 |
-| per | double | Player Efficiency Rating | -90.6 | 133.8 |
-| ts_pct | double | True Shooting Percentage | 0.0 | 1.5 *(values above 1 inherited from original dataset)* |
-| ws | double | Win Shares | -2.1 | 21.2 |
+| per | double | Player Efficiency Rating (a measure of per-minute production) | -90.6 | 133.8 |
+| ts_pct | double | True Shooting Percentage (shooting efficiency considering 2-pt FG, 3-pt FG and FT) | 0.0 | 1.5 *(values above 1 inherited from original dataset)* |
+| ws | double | Win Shares (an estimate of the number of wins contributed by a player) | -2.1 | 21.2 |
 | award_share | double | MVP voting share | 0.0 | 1.0 |
 
 
@@ -196,13 +202,13 @@ The bronze layer acts as the immutable record of the input data.
 - Corrected mismatches between MVP names and player names in the main statistics table.  
 - Filtered the data to include only seasons from 1982 to 2022, matching the scope of the primary dataset.
 
-These updates produced a clean and analytically reliable dataset for the gold layer.
+These updates produced a clean and reliable dataset for the gold layer.
 
 
 ### 6.3 Gold Layer
 - Created analytical tables specifically designed to answer each research question.  
 - Joined MVP, player statistics and champion data into combined structures where appropriate.  
-- Built helper tables, such as a baseline of MVP averages, to support comparative evaluations.  
+- Built helper tables or views, such as a baseline of MVP averages, to support comparative evaluations.  
 - Ensured that all tables in the gold layer followed a flat structure to simplify querying and improve clarity.
 
 The gold layer is the primary input for all analysis in the project.
@@ -220,21 +226,12 @@ A structured data quality review was conducted to identify potential issues:
 
 Where appropriate, the findings were incorporated into the silver layer transformations.
 
-
-### 6.5 Note on the Use of AI
-
-Artificial intelligence was used selectively to support this work. It assisted with:
-- refining code snippets  
-- improving clarity in the documentation  
-
-All analytical decisions, validation steps and transformations were performed manually by the author, and the AI support did not substitute for technical reasoning or interpretation.
-
 ---
 
 
 ## 7. Analysis Results
 
-The full analytical process, including all SQL and PySpark commands, intermediate outputs and detailed exploratory steps, is available in the accompanying Databricks notebook stored in this repository.  
+The full analytical process, including all SQL and PySpark commands, intermediate outputs and detailed exploratory steps, is available in the accompanying Databricks notebook `NBA_MVP_Pipeline.ipynb` stored in this repository.  
 This section summarises the final results of the analysis, presenting the conclusions derived from the refined gold layer tables.
 
 ### 7.1 Question 1: Which statistics are most consistent among MVP winners?
@@ -315,7 +312,7 @@ A join between MVP and champion data identified seasons where both awards aligne
 
 #### 7.4.2 Findings
 
-Out of forty one seasons analysed, the MVP’s team also won the NBA championship fourteen times.  
+Out of forty-one seasons analysed, the MVP’s team also won the NBA championship fourteen times.  
 This represents roughly one third of all seasons in scope.
 
 This result indicates that strong regular season performance does not guarantee postseason success.  
@@ -331,7 +328,7 @@ Individual excellence and team success often diverge due to the unique demands o
 
 #### 7.5.1 Overview
 
-A comparison was made between MVP baseline averages and non MVP player performance.  
+A comparison was made between MVP baseline averages and non-MVP player performance.  
 Players who exceeded a defined threshold across key metrics were identified.
 
 #### 7.5.2 Findings
@@ -343,7 +340,7 @@ Expanding the threshold to eighty percent widened the group but also reduced the
 
 #### 7.5.3 Conclusion
 
-Very few non MVP players produced seasons that closely matched the statistical profile of MVP winners.  
+Very few non-MVP players produced seasons that closely matched the statistical profile of MVP winners.  
 This reinforces the idea that MVP level performance is extremely rare, and that even excellent players may fall short of the combination of efficiency, scoring and impact associated with the award.
 
 ---
@@ -398,6 +395,14 @@ To strengthen the work and its value in a portfolio, several extensions could be
 - Automating the collection of supplementary datasets through APIs or scraping.
 
 These improvements would enhance the analytical depth and provide a broader and more sophisticated understanding of MVP level performance in the NBA.
+
+### 8.5 Note on the Use of AI
+
+Artificial intelligence was used selectively to support this work. It assisted with:
+- refining code snippets  
+- improving clarity in the documentation  
+
+All analytical decisions, validation steps and transformations were performed manually by the author, and the AI support did not substitute for technical reasoning or interpretation.
 
 ---
 
