@@ -101,9 +101,7 @@ The result is a set of gold tables that are compact and self contained.
 ## 5. Data Catalogue (Gold Layer)
 
 The data catalogue describes the refined analytical tables produced in the gold layer of the medallion architecture.  
-These tables contain the final attributes used to answer the research questions, together with information about their meaning, data type and typical value ranges.
-Columns marked with * are not numerical and do not require min/max analysis.
-
+These tables contain the final attributes used to answer the research questions, together with information about their meaning, data type and typical value ranges.  
 
 ### 5.1 Table: `nba_stats_gold`
 
@@ -112,10 +110,10 @@ This table contains season level statistical records for all NBA players from 19
 | Column | Type | Description | Min | Max |
 |-------|------|-------------|-----|-----|
 | season | int | NBA season year | 1982 | 2022 |
-| player_name* | string | Player’s full name | — | — |
-| pos* | string | Normalised player position (PG, SG, SF, PF, C) | — | — |
+| player_name | string | Player’s full name | — | — |
+| pos | string | Normalised player position (PG, SG, SF, PF, C) | — | — |
 | age | int | Player age during the season | 18 | 44 |
-| team_abbrev* | string | Abbreviation of the player's team | — | — |
+| team_abbrev | string | Abbreviation of the player's team | — | — |
 | g | int | Games played | 1 | 82 |
 | gs | int | Games started | 0 | 82 |
 | mp_per_g | double | Minutes played per game | 0.0 | 43.7 |
@@ -141,11 +139,11 @@ This table combines the MVP list with the corresponding cleaned per game statist
 | Column | Type | Description | Min | Max |
 |--------|------|-------------|------|------|
 | season | int | Season in which the MVP was awarded | 1982 | 2022 |
-| player_name* | string | MVP player name (cleaned and standardised) | — | — |
+| player_name | string | MVP player name (cleaned and standardised) | — | — |
 | pos | string | Normalised player position | C | SG |
 | age | int | MVP age in the award season | 22 | 35 |
-| stats_team_abbrev* | string | Team for which the season statistics were recorded | — | — |
-| mvp_team_name* | string | Official team associated with the MVP award | — | — |
+| stats_team_abbrev | string | Team for which the season statistics were recorded | — | — |
+| mvp_team_name | string | Official team associated with the MVP award | — | — |
 | mp_per_g | double | Minutes per game | 30.4 | 42.0 |
 | pts_per_g | double | Points per game | 15.5 | 35.0 |
 | trb_per_g | double | Rebounds per game | 3.3 | 15.3 |
@@ -355,7 +353,7 @@ The project successfully met its main objective.
 For each of the five research questions, the data was transformed, structured and analysed in a way that produced clear and defensible conclusions.  
 This required identifying the relevant attributes, constructing analytical tables that represented the problem accurately and validating that the results were consistent with expectations from historical NBA trends.
 
-The analyses relied on logic derived from the cleaned gold layer tables, ensuring that the answers were based on reliable data.  
+The analyses relied on logic derived from the cleaned gold layer tables, ensuring that the answers were based on reliable data, not assumptions.  
 The conclusions reflect meaningful insights into MVP level performance, positional trends, franchise dominance, the overlap between individual and team success and the identification of high performing players who did not win the MVP award.
 
 Overall, the analytical objectives as defined in the project scope were achieved.
@@ -366,7 +364,7 @@ A number of challenges emerged during the work:
 
 - It was necessary to investigate data inconsistencies, such as TOT multi team cases or name mismatches, to avoid misleading analytical results.  
 - Some metrics contained missing values or uneven historical coverage, which required contextual interpretation before being used in analysis.  
-- Establishing a fair and justifiable threshold for identifying outstanding non MVP seasons required iterative refinement and reflection.  
+- Establishing a fair and justifiable threshold for identifying outstanding non-MVP seasons required iterative refinement and reflection.  
 - Defining a modelling approach that remained simple enough for the scope of the assignment while still supporting the analytical questions involved careful consideration.
 
 These challenges contributed positively to the learning experience, reinforcing the importance of critical thinking in data preparation and analysis.
@@ -376,7 +374,7 @@ These challenges contributed positively to the learning experience, reinforcing 
 Several limitations should be acknowledged:
 
 - The analysis covers only seasons from 1982 to 2022, which limits historical comparisons to earlier periods.  
-- The identification of outstanding non MVP players was based on a simplified threshold approach and could be expanded with more advanced statistical modelling.  
+- The identification of outstanding non-MVP players was based on a simplified threshold approach and could be expanded with more advanced statistical modelling.  
 - Some data quality issues were noted but not fully explored due to time constraints.  
 - Visual analysis was not included, even though graphs could enrich the interpretation of trends.  
 - The flat gold tables provide clarity but limit more complex analytical modelling.
@@ -388,9 +386,9 @@ These limitations do not undermine the findings but indicate areas where deeper 
 To strengthen the work and its value in a portfolio, several extensions could be incorporated:
 
 - Using predictive modelling to estimate MVP likelihood based on player performance metrics.  
-- Introducing richer performance indicators such as BPM or VORP for more detailed comparisons.  
+- Introducing richer performance indicators such as Box Plus/Minus (BPM) or Value Over Replacement Player (VORP) for more detailed comparisons.  
 - Adding a visualisation layer to present distributions, trends and contrasts in a more intuitive format.  
-- Expanding the temporal scope to include earlier decades and cross era comparisons.  
+- Expanding the temporal scope to include earlier decades and more recent data.  
 - Conducting a more extensive data quality audit, including statistical outlier detection and completeness profiling.  
 - Automating the collection of supplementary datasets through APIs or scraping.
 
